@@ -1,0 +1,48 @@
+%%
+%% This is file `diploma.sty',
+%%
+%%  Copyright 2004 Janos Markus
+%%
+%% Author: Janos Markus (BUTE DMIS)
+%%         markus@mit.bme.hu
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{bmedipl}[2004/02/09 v0.1 BUTE MSc stylefile]
+
+\RequirePackage[utf8]{inputenc}
+\RequirePackage{t1enc}
+\RequirePackage[english,magyar]{babel}
+\RequirePackage{times}
+\RequirePackage{fancyhdr}
+\RequirePackage[left=3.5cm,top=2.5cm,right=2.5cm,bottom=2.5cm]{geometry}
+
+\newcommand{\nev}{Lapos Elemér}
+\newcommand{\konzulens}{dr.~Fülelő Benő}
+\newcommand{\konzbeoszt}{adjunktus}
+\newcommand{\cim}{Diploma mintafájl készítése és tesztelése}
+\newcommand{\ev}{2004.}
+
+\newcommand{\pagest}{fancy}  %vagy: plain, vagy: fancy
+\lhead{\nev}
+\rhead{\cim}
+
+\def\blankpage{\pagestyle{empty}\cleardoublepage\pagestyle{\pagest}}
+
+\renewenvironment{abstract}{%
+    \if@openright\blankpage\else\clearpage\fi
+    \null
+    \@beginparpenalty\@lowpenalty
+    \begin{center}%
+      \bfseries \abstractname
+      \@endparpenalty\@M
+    \end{center}\thispagestyle{empty}\markboth{}{}}%
+   {\par\vfil\null}
+
+\renewcommand\chapter{\if@openright\blankpage\else\clearpage\fi%
+                      \thispagestyle{plain}%
+                      \global\@topnum\z@
+                      \@afterindentfalse
+                      \secdef\@chapter\@schapter}
+
+\clubpenalty=8000 \widowpenalty=8000
