@@ -1,0 +1,87 @@
+%diploma-vaz fo dokumentum
+%Keszult: 2004. februar
+%(c) Markus Janos, http://mit.bme.hu/~markus, markus@mit.bme.hu
+%Tesztelve: Miktex 2.3 alatt
+
+%\documentclass[12pt,a4paper,twoside,openright]{report}  %Ketoldalas szedes
+\documentclass[12pt,a4paper,oneside]{report}            %Egyoldalas szedes
+
+%%Itt kivalaszthatjuk az egyes fejezeteket, ha nem akarjuk az egeszet forditani
+%\includeonly{01_elozm, 02_eloszo, 03_1fej}
+
+\usepackage{bmedipl}         %margo-, nyelv es egyeb allitas
+
+%\usepackage{amsmath}         %matematikai segelycsomag
+\usepackage{graphicx}        %grafikai
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{ltablex}
+\usepackage{tikz}
+\lstset{numbers=left, numberstyle=\tiny, basicstyle=\ttfamily, breaklines=true, frame=single, tabsize=2}
+
+\usepackage{setspace}         %1.5-os, 2-es sorkoz hasznalatahoz.
+                              %Ettol a tablazatok, abrak, labjegyzetek maradnak 1-es sorkozzel!
+\onehalfspacing               %1.5-os sortav. Nem kotelezo szerintem...
+%\doublespacing                %2-es sortav. Csak korrekturahoz!...
+
+%\usepackage[dcu]{harvard}    %harvard tipusu hivatkozashoz (ld. a dokumentaciojat)
+% \citationstyle{dcu}
+% \citationmode{abbr}
+% \harvardparenthesis{square}
+% \harvardyearparenthesis{round}
+% \renewcommand{\harvardand}{\'es}
+
+
+%a jelolt neve
+\renewcommand{\nev}{Veres-Szentkirályi András}
+
+%konzulens adatai
+\renewcommand{\konzulens}{Simon Balázs}
+\renewcommand{\konzbeoszt}{PhD hallgató}
+
+%a dolgozat cime, ev
+\renewcommand{\cim}{Extending Python Web Services}
+\renewcommand{\ev}{2011.}
+
+\hyphenation{meg-szentség-te-le-nít-he-tet-len}  %egyedi elvalasztas
+
+\usepackage[
+  unicode=true,
+  colorlinks=false,
+  pdfborder={0 0 0 0},
+  pdfauthor={\nev},
+  pdftitle={\cim}
+]{hyperref}
+\usepackage[all]{hypcap}
+
+\begin{document}
+
+\include{01_elozm}      %elso lapok (Cimlap, kiiras, tartalomjegyzek, Kivonat, Abstract,egyeb)
+%\include{02_eloszo}     %Eloszo, ebben celkituzes, elozmenyek, felepites, koszonetnyilvanitas
+                        %max. nehany oldal
+
+%\include{03_1fej}       %elso fejezet: bevezetes
+%\include{04_2fej}       %masodik fejezet: a problema reszletes kifejtese
+%\include{05_3fej}       %harmadik fejezet: eddig alkalmazott megoldas
+
+\include{06_4fej}       %negyedik fejezet: a jelolt megoldasa
+%\include{07_5fej}       %Osszefoglalas: ertekeles, tovabbi munka
+
+%\include{08_utozm}     %Utolso lapok: koszonetnyilvanitas, egyeb...
+
+%\include{09_irod}       %Irodalomjegyzek
+
+%\include{10_f0_cl}      %Fuggelek cimlap
+%\include{10_f1_or}      %1. fuggelek
+%\include{10_f2_me}      %2. fuggelek
+%\include{10_f3_pr}      %3. fuggelek
+%\include{10_f4_cd}      %4. fuggelek
+%\include{10_f5_dk}      %5. fuggelek
+%\include{10_f6_hl}      %6. fuggelek
+%\include{10_f7_br}      %Biralat: későbbi kötéshez, opcionalis
+
+%\include{11_lof}        %Esetleges abrak, tablazatok jegyzeke (lehet az elejen is, nem kotelezo)
+%\include{12_rovid}      %Roviditesek jegyzeke
+
+\end{document}

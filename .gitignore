@@ -1,0 +1,9 @@
+thesis.pdf
+*.make
+*.log
+*.fls
+*.d
+*.aux
+*.toc
+*.out
+*.temp
