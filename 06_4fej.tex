@@ -37,8 +37,6 @@ There are few other projects trying to create XML signatures, with not much succ
 
 \subsection{The Python component}
 
-The class diagram of the Python component of the plugin can be seen on Figure \ref{fig:clsdSudsSigner}, the Python-specific notations are expressed using stereotypes. Since UML doesn't support functions, just methods, each module with functions have a pseudoclass named after the module with \emph{module} stereotype. The main class is the \emph{SignerPlugin}, which directly interfaces SUDS, its \emph{sending} method is invoked after the SOAP envelope is complete, but before it's sent. The only parameter (\emph{context}) represents the SOAP invocation context, through which the serialized envelope can be accessed and modified.
-
 \begin{figure}[htbp]
  \centering
  \includegraphics[height=22cm]{images/clsdSudsSigner.pdf}
@@ -46,3 +44,9 @@ The class diagram of the Python component of the plugin can be seen on Figure \r
  \label{fig:clsdSudsSigner}
 \end{figure}
 
+The class diagram of the Python component of the plugin can be seen on Figure \ref{fig:clsdSudsSigner}, the Python-specific notations are expressed using stereotypes. Since UML doesn't support functions, just methods, each module with functions have a pseudoclass named after the module with \emph{module} stereotype. The main class is the \emph{SignerPlugin}, which directly interfaces SUDS, its \emph{sending} method is invoked after the SOAP envelope is complete, but before it's sent. The only parameter (\emph{context}) represents the SOAP invocation context, which makes the serialized envelope available through its \emph{envelope} attribute for access and modification. The method body is merely six lines of code, all elementary functionality is refactored to methods following the Single Reponsibility Principle (SRP), and the functionality can be described as two distinct steps.
+
+\begin{enumerate}
+ \item The first step does two things -- first, it finds and marks the body of the SOAP envelope with an ID (currently constant \verb|suds-signed|), then the security header is selected (or created if there's not one) and a so-called \emph{signature template} is inserted into it. This kind of processing is most easily done using the ElementTree implementation of LXML, therefore this part is framed with LXML parsing and serialization -- both the input and the output is an XML string.
+ \item The second part finishes up, and signs the XML output using the template provided with the XMLSec library. The input and output are XML strings again, this time parsed directly by the libxml2 parser.
+\end{enumerate}
