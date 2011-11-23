@@ -4,13 +4,13 @@
 
 \subsection{Internal structure}
 
-The internal structure of the plugin can be seen on Figure \ref{fig:cdSudsSigner}, the stereotypes describe the functionality (component or binding) and the runtime environment (Python or native) of each component. Native components are preferred for their reusability and performance -- reusable components are tested more thoroughly, as more projects can depend on them, which makes them less prone to errors, thus more suitable for security-critical tasks, such as cryptography (OpenSSL). From a performance point of view, XML parsing and processing is also a task, that is better done using native and mature code (libxml2) because of its complexity. Python, on the other hand, is more suitable for the purpose of connecting components together, and describe high-level business logic in a readable and portable way.
+The internal structure of the plugin can be seen on Figure \ref{fig:cmpdSudsSigner}, the stereotypes describe the functionality (component or binding) and the runtime environment (Python or native) of each component. Native components are preferred for their reusability and performance -- reusable components are tested more thoroughly, as more projects can depend on them, which makes them less prone to errors, thus more suitable for security-critical tasks, such as cryptography (OpenSSL). From a performance point of view, XML parsing and processing is also a task, that is better done using native and mature code (libxml2) because of its complexity. Python, on the other hand, is more suitable for the purpose of connecting components together, and describe high-level business logic in a readable and portable way.
 
 \begin{figure}[htbp]
  \centering
- \includegraphics[width=\textwidth]{images/cdSudsSigner.pdf}
+ \includegraphics[width=\textwidth]{images/cmpdSudsSigner.pdf}
  \caption{Component diagram of the SudsSigner plugin}
- \label{fig:cdSudsSigner}
+ \label{fig:cmpdSudsSigner}
 \end{figure}
 
 \subsection{Components used}
