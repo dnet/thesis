@@ -37,6 +37,8 @@ There are few other projects trying to create XML signatures, with not much succ
 
 \subsection{The Python component}
 
+The class diagram of the Python component of the plugin can be seen on Figure \ref{fig:clsdSudsSigner}, the Python-specific notations are expressed using stereotypes. Since UML doesn't support functions, just methods, each module with functions have a pseudoclass named after the module with \emph{module} stereotype. The main class is the \emph{SignerPlugin}, which directly interfaces SUDS, its \emph{sending} method is invoked after the SOAP envelope is complete, but before it's sent. The only parameter (\emph{context}) represents the SOAP invocation context, through which the serialized envelope can be accessed and modified.
+
 \begin{figure}[htbp]
  \centering
  \includegraphics[height=22cm]{images/clsdSudsSigner.pdf}
