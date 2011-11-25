@@ -84,7 +84,7 @@ Although the performance of the Python component is affected by its interpreted 
  \label{fig:clsdArena}
 \end{figure}
 
-Interoperability is one of the key motivations behind Service-Oriented Architecture, so a SOA component is essentially worthless without the capability of ``talking'' to other implementations. For this purpose, I developed a testbed called \emph{arena} before implementing any of the changes mentioned in the sections above. I chose Apache CXF as the reference implementation, although any solution could be plugged in easily. The registry of test subjects are stored in a JSON file (\verb|arena.json|) which contains a serialized \emph{Configuration} object (see class diagram on Figure \ref{fig:clsdArena}). Although the attribute names describe their intents, the following outline of processing should shed enought light on their usage to make the structure easy to understand.
+Interoperability is one of the key motivations behind Service-oriented Architecture, so a SOA component is essentially worthless without the capability of ``talking'' to other implementations. For this purpose, I developed a testbed called \emph{arena} before implementing any of the changes mentioned in the sections above. I chose Apache CXF as the reference implementation, although any solution could be plugged in easily. The registry of test subjects are stored in a JSON file (\verb|arena.json|) which contains a serialized \emph{Configuration} object (see class diagram on Figure \ref{fig:clsdArena}). Although the attribute names describe their intents, the following outline of processing should shed enought light on their usage to make the structure easy to understand.
 
 \subsection{Outline of processing}
 
