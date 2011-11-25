@@ -52,3 +52,63 @@ The class diagram of the Python component of the plugin can be seen on Figure \r
 \end{enumerate}
 
 Although the performance of the Python component is affected by its interpreted runtime, I made several architectural decisions to rationalize CPU and memory consumption. The \emph{SudsSigner} class initializes the native libraries only once in the constructor, and shuts them down in the destructor, thus reducing the time needed to process one single invocation. Native components need direct resource management because of the lack of garbage collection -- Python provides context managers for this problem, so I created two wrapper classes. \emph{LibXML2ParsedDocument} parses an XML string using python-libxml2, while \emph{XmlSecSignatureContext} encapsulates an XMLSec signature context object, and both free the resources upon leaving the scope of their use, thus minimizing memory usage.
+
+\section{Testing and verification -- Arena}
+
+\subsection{Internal structure}
+
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=11cm]{images/clsdArena.pdf}
+ \caption{Class diagram of the business objects used in the \emph{Arena} testbed}
+ \label{fig:clsdArena}
+\end{figure}
+
+Interoperability is one of the key motivations behind Service-Oriented Architecture, so a SOA component is essentially worthless without the capability of ``talking'' to other implementations. For this purpose, I developed a testbed called \emph{arena} before implementing any of the changes mentioned in the sections above. I chose Apache CXF as the reference implementation, although any solution could be plugged in easily. The registry of test subjects are stored in a JSON file (\verb|arena.json|) which contains a serialized \emph{Configuration} object (see class diagram on Figure \ref{fig:clsdArena}). Although the attribute names describe their intents, the following outline of processing should shed enought light on their usage to make the structure easy to understand.
+
+\subsection{Outline of processing}
+
+\subsubsection{Testing}
+
+Sample command line: \verb|python arena.py test cxf suds|
+
+\begin{enumerate}
+ \item The service named \emph{cxf} and the consumer named \emph{suds} are loaded from the registry.
+ \item An unused TCP port number is generated using low-level socket operations.
+ \item An endpoint URL is generated using the port selected in step 2 -- this gets stored in the environment value \verb|ENDPOINT_URL|.
+ \item A TCP socket is created, and its availability (hostname and port separated with a colon) gets stored in the environment value \verb|CONNECT_BACK|.
+ \item The WSDL URL is generated using the format provided in the \verb|wsdl| attribute of the service object. This URL gets stored in the environment value \verb|WSDL_URL|.
+ \item The service gets started with its working directory set to the one specified in the \verb|directory| attribute of the service object.
+ \item When the service is ready, it connects to the raw TCP socket specified in the \verb|CONNECT_BACK| environment value. The testbed waits for this connection using a -- currently hardcoded -- timeout.
+ \item The consumer gets started just like the service, but with its stdout monitored by the testbed.
+ \item The testbed waits for the consumer process to finish, and evaluates success based on the presence of the string specified in the \verb|expected| attribute of the consumer object on the standard output.
+ \item Finally, the service process gets terminated, the testbed waits for it to finish up before exiting.
+\end{enumerate}
+
+\subsubsection{Cleaning}
+
+Sample command line: \verb|python arena.py clean consumer cxf|
+
+\begin{enumerate}
+ \item The consumer named \emph{cxf} is loaded from the registry.
+ \item If the \verb|cleancmd| attribute is specified, it gets executed in the directory specified in the \verb|directory| attribute of the service object.
+\end{enumerate}
+
+The cleaning process is important in case of solutions like Java, that use generated classes, which can cache previously used WSDL files referring to TCP ports that are no longer open.
+
+\subsection{Generation of keys}
+
+First, I used static keys from an earlier test, but later, the expired certificates cost me a lenghtful debugging session. To avoid this, I removed those keys, and created a small subsystem to generate the keypairs and certificates required for digital signature testing. Since Java -- and thus CXF, too -- prefers the Java Key Store (JKS) format, which nobody else really uses, one of my requirements was to create such solution, that generates certificates along with private and public keys in both JKS and PEM formats. The direction of conversion is arbitrary, I chose generating the keypair in JKS, because the first working version used that, but it'd be trivial to change it to the opposite.
+
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=14cm]{images/ucdArenaKeys.pdf}
+ \caption{Use-case diagram of the \emph{Arena} testbed key generator}
+ \label{fig:ucdArenaKeys}
+\end{figure}
+
+Since the generation and transformation of keys mainly consist of calling external programs (\emph{keytool} and \emph{openssl}) and involve dependency handling, \emph{make} was a logical choice. I implemented the use-cases and their dependencies (see Figure \ref{fig:ucdArenaKeys}) in a makefile, and by adding a pseudo target (\emph{phony} -- using the terms of \emph{make}) called \emph{all} as the first rule, which depends on the public KeyStore and the private PEM, issuing a \verb|make| command in the \verb|keys| directory of the testbed generates all the necessary keys in one step. All the dependency handling is automatically done by \emph{make}, if any key changes or goes missing, only the strictly necessary amount of files get regenerated -- but if necessary, the \emph{clean} pseudo target guarantees a fresh start.
+
+\subsection{Usage during the development}
+
+First, I created the testbed in parallel with developing a working CXF service-consumer pair. Besides easy development and testing, this setup made it trivial to capture network traffic generated by an already working solution -- something that made developing the SUDS improvements far more trivial than using just the specifications. I also changed a bit of the architecture later, as the first version used polling -- it tried connecting to the service in a tight loop, and started the consumer right after the first success. As it turned out, not all services are ready at the moment of socket binding, so I changed it to a push-style communication -- the service signals the testbed, when it's ready to receive consumer connections, which is also more resource conservative, since it requires one single TCP connection as opposed to lots of rejected polling packets.
