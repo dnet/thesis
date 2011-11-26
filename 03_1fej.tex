@@ -1,3 +1,98 @@
 \chapter{Service-oriented Architecture and Web Services}
 
+\section{SOA history and principles}
+
+As \cite{soa_modeling} remembers, not long after the new millenium, the world of IT got fed up with interoperability, reusability, and other issues -- and Service-oriented Architecture was born. The paradigm was was built upon the foundations of IT best practices of its time, and tried to encourage software design made of loosely coupled components. Reduction of time to market and business agility are advantages, that are obvious to both business and IT people. This step is a logical one in the course of software engineering history -- states \cite{devcom_soa_intro}. The technological shifts always followed the increasing software complexity, from functions, through classes, to components. But even the users of components are tied to the technology (runtime, platform) the component uses. According to \cite{ibm_soa_impro}, SOA addresses this problem by the following guiding principles.
+
+\begin{itemize}
+ \item Reuse, granularity, modularity, composability, and componentization
+ \item Compliance to standards (both common and industry-specific)
+ \item Services identification and categorization, provisioning and delivery, and monitoring and tracking
+\end{itemize}
+
+\section{Web Services}
+
+Many technologies tried to implement SOA (or something close), for example Microsoft's DCOM and OMG's CORBA also offered a somewhat standardized way for entities (components, services) to interoperate. One of the problems were the limitations of the implementations -- DCOM obviously depended on Windows as a platform, and although CORBA had (and has) ORB implementations available to several platforms and under diverse licensing, but the interoperability between these was often an issue. An even more troubling problem was the communications foundation of these solutions. Most of these (DCOM and CORBA at least for sure) used a binary protocol and required direct connections to TCP ports -- sufficient for components communicating within the local corporate network, but unimaginable over the internet.
+
+The World Wide Web introduced HTTP as a transport protocol, one especially designed for use over the internet. Besides that, corporate networks could also make use of it, since proxy servers could be installed, with the option of inspection, forwarding, filtering, and mangling of content passing through. These two properties made it a great foundation for interoperation, since the protocol allows any kind of content to be transferred, regardless of its type.
+
+In a wide sense, every service, that is available for invocation through HTTP can be considered a web service, regardless of the layer used above HTTP. XML-RPC was the first such ``payload'', and as the name suggests, its semantics were based on method invocation. The structure is suprisingly simple, the method name and parameters are transmitted as the body of an HTTP request, and the body of the response contains the return value(s), both serialized using XML. A sample transcript can be seen on Figure \ref{fig:xmlrpc-sample}.
+
+\begin{figure}[htbp]
+ \centering
+ \begin{minipage}[t]{0.56\linewidth}
+  \centering
+  \begin{lstlisting}[language=XML, numbers=off]
+<?xml version="1.0"?>
+<methodCall>
+ <methodName>getPop</methodName>
+ <params>
+  <param>
+   <value>
+    <string>Budapest</string>
+   </value>
+  </param>
+ </params>
+</methodCall>
+  \end{lstlisting}
+ \end{minipage}
+ \hspace{0.5cm}
+ \begin{minipage}[t]{0.37\linewidth}
+  \centering
+  \begin{lstlisting}[language=XML, numbers=off]
+<?xml version="1.0"?>
+<methodResponse>
+ <params>
+  <param>
+   <value>
+    <i4>1733685</i4>
+   </value>
+  </param>
+ </params>
+</methodResponse>
+  \end{lstlisting}
+ \end{minipage}
+ \caption{Transcript of an XML-RPC method invocation}
+ \label{fig:xmlrpc-sample}
+\end{figure}
+
+\section{SOAP and friends}
+
+\begin{figure}[htbp]
+ \centering
+ \begin{minipage}[t]{0.47\linewidth}
+  \centering
+  \begin{lstlisting}[language=XML, numbers=off]
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+ <soap:Body>
+  <bme:getPop xmlns:bme="http://vsza.hu/bme">
+   <city>Budapest</city>
+  </bme:getPop>
+ </soap:Body>
+</soap:Envelope>
+  \end{lstlisting}
+ \end{minipage}
+ \hspace{0.5cm}
+ \begin{minipage}[t]{0.47\linewidth}
+  \centering
+  \begin{lstlisting}[language=XML, numbers=off]
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+ <soap:Body>
+  <bme:getPopResponse xmlns:bme="http://vsza.hu/bme">
+   <return>1733685</return>
+  </bme:getPopResponse>
+ </soap:Body>
+</soap:Envelope>
+  \end{lstlisting}
+ \end{minipage}
+ \caption{Transcript of a SOAP method invocation}
+ \label{fig:soap-sample}
+\end{figure}
+
+As \cite{box_soap_history} wrote, SOAP has evolved from XML-RPC inside Microsoft -- the base operation remained the same, the method identification and parameters are serialized using XML, and so is the response. One notable difference is the absence of XML header (SOAP uses UTF-8 encoding implicitly) and the extensive use of XML namespaces, as it can be seen on Figure \ref{fig:soap-sample}. W3C took control of the specification, and SOAP became the encoding of web services, with usually HTTP(S) or SMTP as the underlying transport mechanism. WSDL was born to describe the interface of web services, using XML again. Although other technologies appeared (such as UDDI for service discovery) the two dominant players in web services are SOAP and WSDL.
+
+WSDL is usually automatically generated from services written in any programming language. Client libraries running on platforms supporting dynamic dispatch (such as Python, Ruby, PHP) usually allow dynamic creation of service proxies for consumption using the WSDL. The other approach, available for all runtimes and most programming languages is automatized code generation, during which class hierarchies representing the service interfaces are generated for later used in compiled code. During invocation, the proxy serializes the platform-dependent data structures into a SOAP envelope, and transfers it to the service, which does the exact opposite by marshalling the parameters into native objects. This way, both the service and the consumer code handles entities that are native to the platform they're dependent on, and can interoperate with each other, without any prior knowledge of the technology powering the ``other side''.
+
+\section{Advanced web services}
+
 % TODO
