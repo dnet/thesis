@@ -1,3 +1,81 @@
 \chapter{Opportunities and internals of SUDS}
 
+\section{Introduction}
+
+As I described in section \ref{suds}, SUDS is the de facto way of consuming web services in Python. One of the most compelling features lies within its simplicity and user friendliness. These help in the beginning, by making it really easy to create a working prototype in no time, both by using the interactive shell and writing scripts -- but later, the code is still readable, and at the same time, caching helps eliminating the performance trade-off. A sample run, consuming a currency rate service using SUDS in the interactive Python shell can be seen in Figure \ref{fig:suds-currency}.
+
+\begin{figure}[htbp]
+ \centering
+\begin{lstlisting}[numbers=off, basicstyle=\footnotesize\ttfamily]
+Python 2.7.2+ (default, Aug 16 2011, 07:03:08)
+[GCC 4.6.1] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from suds.client import Client
+>>> url = 'http://www.webservicex.net/CurrencyConvertor.asmx?WSDL'
+>>> c = Client(url)
+>>> print c
+
+Suds ( https://fedorahosted.org/suds/ )  version: 0.4.1 (beta)  build: R703-20101015
+
+Service ( CurrencyConvertor ) tns="http://www.webserviceX.NET/"
+   Prefixes (1)
+      ns0 = "http://www.webserviceX.NET/"
+   Ports (2):
+      (CurrencyConvertorSoap)
+         Methods (1):
+            ConversionRate(Currency FromCurrency, Currency ToCurrency, )
+         Types (1):
+            Currency
+      (CurrencyConvertorSoap12)
+         Methods (1):
+            ConversionRate(Currency FromCurrency, Currency ToCurrency, )
+         Types (1):
+            Currency
+
+
+>>> c.service.ConversionRate('EUR', 'HUF')
+315.6003
+\end{lstlisting}
+ \caption{Requesting currency conversion rate using SUDS}
+ \label{fig:suds-currency}
+\end{figure}
+
+\section{Internal structure}
+
+In order to improve SUDS, I had to discover its inner workings -- the documentation covered standard use-cases pretty well, but told little about architecture. I split the code in time domain into two pieces, the separator being the end of \emph{suds.client.Client} object instatiation. Before that, WSDL fetching and parsing happens, and afterwards, during invocations, SOAP messages are built, sent, and responses are parsed and returned.
+
+\subsection{Client proxy instantiation}
+
+% TODO
+
+\subsection{Service method invocation}
+
+% TODO
+
+\subsection{Document Object Model of SUDS}
+
+% WTF DOM
+
+As the \cite{suds-doc} states, it ``was written [because] elementtree and other python XML packages either: have a DOM API which is very unfriendly or: (in the case of elementtree) do not deal with namespaces and especially prefixes sufficiently'' -- and in retrospect, it was a perfectly sane decision back then.
+
+% now we have LXML -> soaplib
+% how it works
+% why it shouldn't change -> compatibility, plugins, etc.
+% peculiarities -> double ns
+
+\section{Opportunities}
+
+\subsection{Current WS-Security implementation}
+
+\subsubsection{Timestamp}
+
+% TODO
+
+\subsubsection{UsernameToken}
+\label{sudsUsernameToken}
+
+% TODO
+
+\subsection{Plugin system}
+
 % TODO
