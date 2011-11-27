@@ -16,4 +16,35 @@ There are separate projects, that bridges the Python world with other solutions 
 
 Python comes with ``batteries included'' -- libraries are available for most purposes a developer might need, such as file manipulation, network connectivity, parsing and serializing from and to a variety of formats. Libraries can be either written in Python -- in which case, they are as portable as any other Python code between runtimes -- or using the C/C++ API. Thin, sometimes automatically generated libraries, that only wrap a certain native libraries are called bindings -- there's even a dialect of Python called Cython, that allows calling of C/C++ functions, and produces native code. Because of these features, although interpreted languages are usually suffer from poor performance, well-designed Python applications perform only high-level orchestration in the interpreted engine, and delegate computationally intensive tasks to native code. This design motivates developers to avoid premature optimization, while allowing fast prototyping and outstanding performance using the same foundations.
 
+\section{Python SOA solutions}
+
+\subsection{Introduction}
+
+The community around the Python ecosystem is one of those closest to the ``free software culture'' envisioned by Richard M. Stallman and Eric S. Raymond. This results in libraries being written mostly out of curiosity and immediate need -- a good combination for a good base system, not so good for SOAP. Many other ways of remote method invocation are solved in Python libraries, but SOAP has maintained a low level of maturity. The basic invocation examples usually work, but the level of development clearly shows the needs of the developer.
+
+This problem is partly caused by the network effect: if everybody uses .NET and Java for web service interoperation, if a platform needs to be chosen for a solution to access them, it usually seems logical for most people to choose one of the two heavyweight products. The other factor is the mindset of Python developers -- they usually like to build systems out of small, autonomous entities, interconnected by simple and trivial protocols, and SOAP is not the first thing that comes to mind with these features, despite the fact that it can be used wisely.
+
+Of course, there are developers both working on and using SOA with Python, there's even a public mailing list dedicated for the purpose, archives and subscription are available at \url{http://mail.python.org/mailman/listinfo/soap}.
+
+\subsection{SOAPy}
+
+As \cite{so-206154} wrote, it was the best SOAP client in the Python ecosystem, but the project is abandoned. As noone maintains the codebase -- its homepage was last modified in 2001 -- it became incompatible with later Python releases, which makes it hard to use in modern environments. The Debian project doesn't even maintain a package, so the only way to install it is to download the tar.gz file (uploaded in April 27, 2011) and extract it manually.
+
+I found its internal structure very simple -- the library consists of two Python source files, both under 500 lines of length. By looking at the import section, it was obvious, that it used libraries and functions, that are way obsolete now. Still, some of them are kept for the sake of backwards compatiblity, but the PyXML package it used for XML processing is also no longer maintained, and had been removed from most major GNU/Linux distributions. The documentation -- including the examples -- suggested, that SOAPy offered client functionality only, and I didn't find any contradicting evidence in the source code.
+
+\subsection{Zolera SOAP Infrastructure}
+
+ZSI is the other ``old boy'' among Python SOAP libraries. As \cite{pywebsvcs-talk} states, it way last fully released in 2007, but unlike SOAPy, it can be still used with recent Python environments. It offers two ways of operation: for simple services, it can construct the SOAP messages without a schema (Binding class), and for complex services, a proxy (ServiceProxy class) can be used to serialize arguments. It supports code generation from WSDL (\verb|wsdl2py|) and ``can also be used to build applications using SOAP Messages with Attachments'' \cite{zsi-doc}.
+
+Ralf Schmitt wrote in \cite{zsi-velocity}, that ZSI is neither easy to set up and use, nor fast. I tried it anyway, and it was easy to install, since Debian still maintains a package. The first ServiceProxy example, which I took straight from the ZSI documentation failed, but I figured out, that they changed the structure, so I managed to run a test. It worked pretty well as a client, but it lacked any advanced debugging features -- for example, the list of methods could only be determined by listing the methods of the service proxy. Also, code (re)generation is necessary for complex data types, and is far from being trivial.
+
+\subsection{soaplib / rpclib}
+
+Soaplib focused on server-side SOAP implementation, using Python decorators, and provided WSGI-compatible services, so deployment was possible with both standalone processes or any WSGI-compatible web server (such as Apache \verb|mod_wsgi|). \cite{so-206154} wrote, that ``creating clients is a little bit more challenging'', so I looked through the documentation, and found, that according to \cite{soaplib2-changelog}, the developers did ``the right thing'' and shifted their entire focus on server implementation by dropping client functionality in favor of SUDS (see section \ref{suds}) at version 0.9.
+
+The project was later renamed to rpclib, and widened its scope -- the old library only receives bug fixes, as the main developer focuses on the new one. I tried using it, and found it pleasant to use. Despite Python being a dynamically typed language, enabling code to be accessible via SOAP had not ``littered'' the code, and it offered automatic WSDL generation.
+
+\subsection{SUDS}
+\label{suds}
+
 % TODO
