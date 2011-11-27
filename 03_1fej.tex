@@ -103,7 +103,7 @@ Using WSDL as a machine-parseable, standardized form of service descriptor was a
 
 During the course of my thesis, I focused on the technologies for securing web services. When introducing this area to people, many reply with ``just use HTTPS'', which indeed provides transport security between two hosts. The problem with that approach is that one of the key features of web services is the ability to interconnect services and consumers in different networks, which means, that the network traffic might have to pass through HTTP proxies and other advanced network appliances. This makes HTTPS inadequate to establish a secure (authenticated, digitally signed, and/or encrypted) end-to-end connection, so the problem has to be solved inside SOAP, and HTTPS can only be thought as an outer layer of protection.
 
-After initial development by IBM, Microsoft and Verisign, OASIS released WS-Security 1.0 on April 19, 2004. It covers all three aspects I mentioned in the previous paragraph using the following technologies.
+After initial development by IBM, Microsoft and Verisign, OASIS released WS\hyp{}Security 1.0 on April 19, 2004. It covers all three aspects I mentioned in the previous paragraph using the following technologies.
 
 \begin{description}
  \item[Authentication] Security tokens can be attached to the SOAP message header for the sender to identify herself. This can be done using either username-password pairs (in plaintext or digested format) or by using a more heavyweight solution like X.509 or Kerberos.
