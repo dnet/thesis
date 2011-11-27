@@ -47,4 +47,16 @@ The project was later renamed to rpclib, and widened its scope -- the old librar
 \subsection{SUDS}
 \label{suds}
 
-% TODO
+SUDS is a relatively new SOAP client library, compatible with Python 2.4 and newer releases. Its operation is like the proxy feature of ZSI, but it doesn't require any code generation. Complex classes can be assembled using the factory pattern, and while it might seem, that parsing WSDL and generating class hierarchy on-the-fly is slow, the built-in caching provides quite a performance. It supported several methods of authentication, including HTTP basic and digest, and also NTLM, which is necessary to consume Microsoft SharePoint web services. According to the general opinion of related forums and mailing lists (including \cite{so-206154}), SUDS is the preferred Python way of creating SOAP clients, and the library doesn't depend on obsolete components.
+
+SUDS was released in a regular manner till 2010, and is available as a package in major Linux distributions. This way, installing the library was not a big issue, and the documentation \cite{suds-doc} covers all common use-cases. I tried it first with a basic invocation, and it worked as expected. Special methods were overridden in a way, that using the \verb|print| command on SUDS object rendered a nicely formatted, human readable printout, which makes debugging and experimentation much easier.
+
+\subsection{sec-wall}
+
+Although \cite{sec-wall-homepage} describing sec-wall as ``a security proxy that comes with tons of interesting features, very good documentation and an exceptionally friendly community'' might sound like the usual shameless self-promotion, this relatively new tool (1.0 released in April 2011) is a real gem. It acts as a proxy, thus enables the transformation of any SOAP backend into an advanced web service. Although written in Python could have meant poor performance, it takes the issue seriously and makes use of libraries that provide an native event-driven architecture.
+
+I found it during the field-work, and I worked together with its author, Dariusz Suchojad to improve it -- one of the results were complete and correct UsernameToken support (both plain and digest), and an experimental digital signature implementation. Beside the performance and reusability, the quality of the software is also suprisingly great; it's built around the Python Spring Framework, making good use of the dependency injection feature, and its tests provide 100\% code coverage.
+
+\subsection{Common problems}
+
+While inspecting libraries offering both service and consumer functionality, unfortunately, they provided no or little support for advanced web services. SUDS offered UsernameToken, but didn't work in any mode, soaplib/rpclib and ZSI didn't even mention the possibility of such solutions -- although ZSI had some unused code implementing XML canonicalization. SOAPy barely even implemented SOAP -- besides it's unusable in modern environments. Although sec-wall solves the situation by providing proxy support, the problem of the client side remains -- and that's exactly, why I decided, to take a close look into SUDS.
