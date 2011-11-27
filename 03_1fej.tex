@@ -95,4 +95,18 @@ WSDL is usually automatically generated from services written in any programming
 
 \section{Advanced web services}
 
-% TODO
+\subsection{Introduction}
+
+Using WSDL as a machine-parseable, standardized form of service descriptor was a vast improvement on the way of web services from XML-RPC to SOAP. W3C and OASIS standardized many additional methods of improving web services, such as metadata exchange, security, and reliable messaging. On the bright side, these make it possible to build advanced services while maintaining responsibility separation (implementation focuses on business logic) and without sacrificing interoperability. But on the other hand, these standards are complex, and continuously evolve -- a great example is WS-Reliability vs. WS-ReliableMessaging -- so not every SOAP implementation support everything, which in turn limits interoperability and thus platform independence.
+
+\subsection{Security}
+
+During the course of my thesis, I focused on the technologies for securing web services. When introducing this area to people, many reply with ``just use HTTPS'', which indeed provides transport security between two hosts. The problem with that approach is that one of the key features of web services is the ability to interconnect services and consumers in different networks, which means, that the network traffic might have to pass through HTTP proxies and other advanced network appliances. This makes HTTPS inadequate to establish a secure (authenticated, digitally signed, and/or encrypted) end-to-end connection, so the problem has to be solved inside SOAP, and HTTPS can only be thought as an outer layer of protection.
+
+After initial development by IBM, Microsoft and Verisign, OASIS released WS-Security 1.0 on April 19, 2004. It covers all three aspects I mentioned in the previous paragraph using the following technologies.
+
+\begin{description}
+ \item[Authentication] Security tokens can be attached to the SOAP message header for the sender to identify herself. This can be done using either username-password pairs (in plaintext or digested format) or by using a more heavyweight solution like X.509 or Kerberos.
+ \item[Digital signature] Signatures can be attached to the SOAP message header in order to protect the integrity of the message and provide non-repudiation. It also supports many strategies, such as RSA, DSA or PGP keys.
+ \item[Encryption] Any subset of the SOAP message can be encrypted, so that only the intended recipient has access to its contents. Since the current specification was found vulnerable to cryptanalisys by \cite{acm-xmlenc-breaking}, I ignored this part in my thesis.
+\end{description}
