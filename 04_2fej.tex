@@ -1,3 +1,19 @@
 \chapter{Existing Python SOA solutions}
 
+\section{About Python}
+
+\subsection{Language}
+
+According to \cite{python-faq}, ``Python is an interpreted, interactive, object-oriented programming language''. What's missing from this self-description are those things, that make the language unique. The first thing most people recognize while reading a Python source code, is the use of indentation for structure markup. This feature might be odd and strict for first sight, but it makes code written by other people highly readable and reusable. The subsequent clean feeling of the code is strenghtened even more by the availability of functional constructs, which give the right tools for most purposes into the hands of the developer. The essence of the language can be reduced to a single phrase, which can be interpreted in both positive and negative ways: ``executable pseudocode'' -- code snippets are explicit enought for most people (even those without Python knowledge) to understand.
+
+\subsection{Runtime}
+
+The first and most widely-used interpreter is called CPython, and it's the reference implementation of the language runtime. It compiles source code (\verb|.py| files) into bytecode (\verb|.pyc| files) for interpretation. It also provides an interactive shell, which can be used for experimentation or debug purposes. Because of this, the UNIX program loader can use it as a standard interpreter, so Python scripts prefixed with an appropriate shebang can be run directly. As the name suggests, the implementation is written in mostly C/C++, which causes built-in functions to perform well.
+
+There are separate projects, that bridges the Python world with other solutions -- IronPython and Jython compiles Python code into .NET and Java bytecode, respectively, and Nokia ported Python to its S60 (Symbian) platform. This way, Python can interoperate with existing frameworks and libraries at a lower level, if needed. Another approach is outlined in the next subsection.
+
+\subsection{Libraries}
+
+Python comes with ``batteries included'' -- libraries are available for most purposes a developer might need, such as file manipulation, network connectivity, parsing and serializing from and to a variety of formats. Libraries can be either written in Python -- in which case, they are as portable as any other Python code between runtimes -- or using the C/C++ API. Thin, sometimes automatically generated libraries, that only wrap a certain native libraries are called bindings -- there's even a dialect of Python called Cython, that allows calling of C/C++ functions, and produces native code. Because of these features, although interpreted languages are usually suffer from poor performance, well-designed Python applications perform only high-level orchestration in the interpreted engine, and delegate computationally intensive tasks to native code. This design motivates developers to avoid premature optimization, while allowing fast prototyping and outstanding performance using the same foundations.
+
 % TODO
