@@ -33,6 +33,7 @@ As \cite{so-206154} wrote, it was the best SOAP client in the Python ecosystem, 
 I found its internal structure very simple -- the library consists of two Python source files, both under 500 lines of length. By looking at the import section, it was obvious, that it used libraries and functions, that are way obsolete now. Still, some of them are kept for the sake of backwards compatiblity, but the PyXML package it used for XML processing is also no longer maintained, and had been removed from most major GNU/Linux distributions. The documentation -- including the examples -- suggested, that SOAPy offered client functionality only, and I didn't find any contradicting evidence in the source code.
 
 \subsection{Zolera SOAP Infrastructure}
+\label{ZSI}
 
 ZSI is the other ``old boy'' among Python SOAP libraries. As \cite{pywebsvcs-talk} states, it way last fully released in 2007, but unlike SOAPy, it can be still used with recent Python environments. It offers two ways of operation: for simple services, it can construct the SOAP messages without a schema (Binding class), and for complex services, a proxy (ServiceProxy class) can be used to serialize arguments. It supports code generation from WSDL (\verb|wsdl2py|) and ``can also be used to build applications using SOAP Messages with Attachments'' \cite{zsi-doc}.
 

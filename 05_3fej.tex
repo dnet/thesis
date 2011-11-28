@@ -46,9 +46,14 @@ In order to improve SUDS, I had to discover its inner workings -- the documentat
 
 \subsection{Client proxy instantiation}
 
-% TODO
+The \emph{Client} object is the ``soul'' of the library and can be found in the \emph{suds.client} module. The constructor has one fixed parameter (the WSDL URL), all the others get stored in a dictionary for later use. Upon creation, the WSDL gets fetched and all the plugins (see section \ref{sudsPlugins}) are notified. The WSDL is parsed for service definitions and schemas -- these are used to create the factories later used for the instatiation of complex objects, and for lookup on method invocation. The root element of the DOM representing the WSDL is stored for the whole lifecycle of the object in the \emph{wsdl} attribute, and the \emph{services} attribute is set to an instance of \emph{ServiceSelector}, the key to method invocation (see section \ref{sudsInvocation}).
+
+\subsection{Instantiation of complex objects}
+
+Since many web services expect complex objects as an input parameter, its instantiation is a problem present in all web services clients. As I mentioned in section \ref{ZSI}, ZSI solved this problem in the ``classic'' way, with source code generation, which makes experimentation teadious and increases turnaround times. In contrast, SUDS offers a solution implementing the Factory pattern, a ``method'' (actually a callable attribute) of the \emph{Client} class, which returns an appropriate object, given a class name. This object can be later populated as a regular object, or its attributes can be used in case of enumerations. Since version 0.3.8, SUDS also supports the automatic conversion of native Python dictionary objects to SOAP complex types, using the keys as attribute names, which can lead to cleaner code in some cases.
 
 \subsection{Service method invocation}
+\label{sudsInvocation}
 
 % TODO
 
@@ -72,5 +77,6 @@ Although now we have LXML (see section \ref{lxml}) which would have satisfied th
 % TODO
 
 \subsection{Plugin system}
+\label{sudsPlugins}
 
 % TODO
