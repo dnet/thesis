@@ -54,14 +54,9 @@ In order to improve SUDS, I had to discover its inner workings -- the documentat
 
 \subsection{Document Object Model of SUDS}
 
-% WTF DOM
+As \cite{w3schools-domintro} defines it, ``XML DOM is a standard for how to get, change, add, or delete XML elements'', which is the better way to construct XML output -- the worse being string concatenation. SUDS has its own implementation, and as \cite{suds-doc} states, it ``was written [because] elementtree and other [Python] XML packages either: have a DOM API which is very unfriendly or: (in the case of elementtree) do not deal with namespaces and especially prefixes sufficiently'' -- and in retrospect, it was a perfectly sane decision back then. The SUDS DOM resides in the \emph{suds.sax} module, and interfaces the outside world with the Python built-in SAX parser. It registers itself as a SAX event handler, and builds the document tree from its own objects in response to parsing events, so there is a clear separation between the Python XML library and the implementation of SUDS.
 
-As the \cite{suds-doc} states, it ``was written [because] elementtree and other python XML packages either: have a DOM API which is very unfriendly or: (in the case of elementtree) do not deal with namespaces and especially prefixes sufficiently'' -- and in retrospect, it was a perfectly sane decision back then.
-
-% now we have LXML -> soaplib
-% how it works
-% why it shouldn't change -> compatibility, plugins, etc.
-% peculiarities -> double ns
+Although now we have LXML (see section \ref{lxml}) which would have satisfied those conditions (and is used by rpclib), it was probably not in this state of maturity, when the SUDS project kicked off. It has its own peculiarities, such as namespace handling is done using (prefix, namespace) tuples -- in constrast with standard notations such as dictionary objects or James Clark style. This self-developed solution also caused the appearance of ``double namespaces'' -- the SOAP-ENV namespace was declared with one prefix for the envelope and header, and another for the body. While working on improving SUDS, I also found that it had several deficiencies, for instance, there's no way of handling attributes with namespaces. It could seem, that now it'd be time to replace the library with a thin wrapper around LXML or some other functionally equivalent components, but it'd break existing code depending on the internals of SUDS.
 
 \section{Opportunities}
 
