@@ -28,7 +28,7 @@ Of course, there are developers both working on and using SOA with Python, there
 
 \subsection{SOAPy}
 
-As \cite{so-206154} wrote, it was the best SOAP client in the Python ecosystem, but the project is abandoned. As noone maintains the codebase -- its homepage was last modified in 2001 -- it became incompatible with later Python releases, which makes it hard to use in modern environments. The Debian project doesn't even maintain a package, so the only way to install it is to download the tar.gz file (uploaded in April 27, 2011) and extract it manually.
+As \cite{so-206154} wrote, it was the best SOAP client in the Python ecosystem, but the project is abandoned. As noone maintains the codebase -- its homepage was last modified in 2001 -- it became incompatible with later Python releases, which makes it hard to use in modern environments. The Debian project doesn't even maintain a package, so the only way to install it is to download the tar.gz file (uploaded in April 27, 2001) and extract it manually.
 
 I found its internal structure very simple -- the library consists of two Python source files, both under 500 lines of length. By looking at the import section, it was obvious, that it used libraries and functions, that are way obsolete now. Still, some of them are kept for the sake of backwards compatiblity, but the PyXML package it used for XML processing is also no longer maintained, and had been removed from most major GNU/Linux distributions. The documentation -- including the examples -- suggested, that SOAPy offered client functionality only, and I didn't find any contradicting evidence in the source code.
 
