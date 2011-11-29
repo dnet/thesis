@@ -67,6 +67,13 @@ Although now we have LXML (see section \ref{lxml}) which would have satisfied th
 
 \subsection{Current WS-Security implementation}
 
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=12cm]{images/clsdSudsWsse.pdf}
+ \caption{Class diagram of the \emph{suds.wsse} module}
+ \label{fig:clsdSudsWsse}
+\end{figure}
+
 \subsubsection{Timestamp}
 
 % TODO
@@ -74,7 +81,7 @@ Although now we have LXML (see section \ref{lxml}) which would have satisfied th
 \subsubsection{UsernameToken}
 \label{sudsUsernameToken}
 
-% TODO
+According to \cite{suds-doc}, SUDS had a UsernameToken implementation, so I tried it with an Apache CXF service. As it turned out, the burden of digest creation was put on the caller, and the type of the password wasn't specified in the token, as required by WS\hyp{}Security. Using the examples in the SUDS documentation, it was easy to find, that the WSSE implementation had a clean OO design, as it can be seen on Figure \ref{fig:clsdSudsWsse}. The \emph{Security} object encapsulated the collection of tokens as a smart container. During invocation, the \emph{xml} method gets called, and it simply constructs an appropriate \emph{wsse:Security} header, and fills it with the result of the \emph{xml} methods of all the tokens, before returning it to the caller.
 
 \subsection{Plugin system}
 \label{sudsPlugins}

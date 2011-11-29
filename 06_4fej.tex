@@ -2,16 +2,7 @@
 
 \section{Completing the implementation of UsernameToken}
 
-\begin{figure}[htbp]
- \centering
- \includegraphics[width=12cm]{images/clsdSudsWsse.pdf}
- \caption{Class diagram of the \emph{suds.wsse} module}
- \label{fig:clsdSudsWsse}
-\end{figure}
-
-As I mentioned in section \ref{sudsUsernameToken}, SUDS had an incomplete UsernameToken implementation, that lacked digest support, and even the plaintext method violated the standards. In order to make the implementation complete and correct, I first had to find and understand the relevant parts of the current codebase. Using the examples in the SUDS documentation, it was easy to find, that the WSSE implementation had a clean OO design, as it can be seen on Figure \ref{fig:clsdSudsWsse}. The \emph{Security} object encapsulated the collection of tokens as a smart container. During invocation, the \emph{xml} method gets called, and it simply constructs an appropriate \emph{wsse:Security} header, and fills it with the result of the \emph{xml} methods of all the tokens, before returning it to the caller.
-
-The then-latest implementation put the burden of digest creation on the caller, and didn't specify the type of password. I changed the constructor of the \emph{UsernameToken} class in two ways.
+As I mentioned in section \ref{sudsUsernameToken}, SUDS had an incomplete UsernameToken implementation, that lacked complete digest support (it could be only set up manually), and even the plaintext method violated the standards by omitting the password type attribute. I changed the constructor of the \emph{UsernameToken} class in two ways.
 
 \begin{itemize}
  \item A new parameter of boolean type called \emph{digest} was added to the parameter list. Its default value is set to \verb|False|, thus making it optional, so previously written code depending on this method will continue to work as expected.
