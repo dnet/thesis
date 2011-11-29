@@ -79,4 +79,13 @@ Although now we have LXML (see section \ref{lxml}) which would have satisfied th
 \subsection{Plugin system}
 \label{sudsPlugins}
 
-% TODO
+Since version 0.4, SUDS has a plugin system, that allows developers to extend its functionality without the need to maintain a separate version of the library. During the construction of a \emph{Client} object, a list of plugin instances can be supplied, and their methods will be called at specific points of the SUDS lifecycle. Most useful use-cases include inspection and (optional) modification of the internal status. These objects should inherit one of the classes in the \emph{suds.plugin} module, and this way, only methods of interest need overriding -- those (currently three) ancestors define the points of interaction available.
+
+The full list of these can be found in \cite{suds-doc}, I'd emphasize the one, I found good use of; it's called \emph{MessagePlugin}, has five possible points of interaction, and thus allows for a fine-grained control over the SOAP message. As it can be seen on Figure \ref{fig:sudsMessage}, interception and modification is possible at all important places, with the data available in the current format (SUDS objects, DOM tree, or bytes) using holder objects called \emph{context}. One suprising thing I found was, that if plugin execution raises an exception, instead of the call failing, processing continues, and the details get logged using the Python logging system -- which means silent fail by default. Still, I found the plugin system to be a well-designed, usable form of extending SUDS.
+
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=\textwidth]{images/sudsMessage.pdf}
+ \caption{SUDS message processing}
+ \label{fig:sudsMessage}
+\end{figure}
