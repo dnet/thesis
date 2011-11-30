@@ -55,7 +55,16 @@ Since many web services expect complex objects as an input parameter, its instan
 \subsection{Service method invocation}
 \label{sudsInvocation}
 
-% TODO
+As it can be seen on Figure \ref{fig:suds-currency}, users simply reference method names, like it's the attribute of the service object -- behind the scenes, the \emph{services} attribute makes use of Python dynamic dispatch. In this case, the \emph{suds.client.ServiceSelector} class overrides the special \verb|__getattr__| method, thus the sample invocation on Figure \ref{fig:suds-currency} caused the Python runtime to first call \verb|c.service.__getattr__| with \emph{getConversionRate} as a string parameter. In case of success, the method returns a callable (function pointers in C/C++, delegates in C\#), which is invoked next with the actual parameters supplied by the user to the \emph{getConversionRate} method call. This makes use of another Python feature -- the positional and named parameters can be retrieved as a list and dictionary, respectively.
+
+If multiple ports and/or services are available, the same dynamic dispatch is played again (sometimes with \verb|__getitem__| instead of \verb|__getattr__|, the complete lookup chain is \emph{Client} $\rightarrow$ \emph{ServiceSelector} $\rightarrow$ \emph{PortSelector} $\rightarrow$ \emph{MethodSelector} $\rightarrow$ \emph{Client}. The second and third step can be implicit, in that case, the first service or port will be used -- in the end, the program flow enters \emph{Client} at the \emph{invoke} method, with completely specified parameters. The parameters are transformed into the SAX representation of a SOAP envelope, as it can be seen on Figure \ref{fig:sudsMessage}, which in turn can be serialized as an XML string. This binary data is now sent using the transport layer (currently \emph{urllib2}), which returns the response -- the same process gets repeated, as with the request, but reversed. In the end, the caller receives the response transformed back to instances of data types native to Python.
+
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=\textwidth]{images/sudsMessage.pdf}
+ \caption{SUDS message processing}
+ \label{fig:sudsMessage}
+\end{figure}
 
 \subsection{Document Object Model of SUDS}
 
@@ -67,6 +76,10 @@ Although now we have LXML (see section \ref{lxml}) which would have satisfied th
 
 \subsection{Current WS-Security implementation}
 
+Using the examples in the SUDS documentation, it was easy to find, that the WSSE implementation had a clean OO design, as it can be seen on Figure \ref{fig:clsdSudsWsse}. The \emph{Security} object encapsulated the collection of tokens as a smart container. During invocation, the \emph{xml} method gets called, and it simply constructs an appropriate \emph{wsse:Security} header, and fills it with the result of the \emph{xml} methods of all the tokens, before returning it to the caller.
+
+The class diagram also makes it clear, that there is no support for digital signatures or encryption -- although surprisingly, there are (currently unused) namespaces defined in the source code for both of them.
+
 \begin{figure}[htbp]
  \centering
  \includegraphics[width=12cm]{images/clsdSudsWsse.pdf}
@@ -76,12 +89,12 @@ Although now we have LXML (see section \ref{lxml}) which would have satisfied th
 
 \subsubsection{Timestamp}
 
-% TODO
+As \cite{ibm-timestamp} and \cite{msdn-wss} agree, WS\hyp{}Security timestamp is useful in case the freshness of the message needs to be verified -- this can be important to avoid replay attacks, or to resolve issues with two or more messages causing contradiction. The standard itself is trivial to implement, and based on my observations of the codebase, the SUDS solution is complete and correct. The \emph{suds.wsse.Timestamp} class even helps the user by automatically setting and formatting the creation and expiration time -- although the lack of digital signature implementation makes this feature unusable for security purposes.
 
 \subsubsection{UsernameToken}
 \label{sudsUsernameToken}
 
-According to \cite{suds-doc}, SUDS had a UsernameToken implementation, so I tried it with an Apache CXF service. As it turned out, the burden of digest creation was put on the caller, and the type of the password wasn't specified in the token, as required by WS\hyp{}Security. Using the examples in the SUDS documentation, it was easy to find, that the WSSE implementation had a clean OO design, as it can be seen on Figure \ref{fig:clsdSudsWsse}. The \emph{Security} object encapsulated the collection of tokens as a smart container. During invocation, the \emph{xml} method gets called, and it simply constructs an appropriate \emph{wsse:Security} header, and fills it with the result of the \emph{xml} methods of all the tokens, before returning it to the caller.
+According to \cite{suds-doc}, SUDS had a UsernameToken implementation, so I tried it with an Apache CXF service. As it turned out, the burden of digest creation was put on the caller, and the type of the password wasn't specified in the token, as required by WS\hyp{}Security. This limits the usability of the solution, but it's certainly easier to extend it, than creating a new implementation from scratch.
 
 \subsection{Plugin system}
 \label{sudsPlugins}
@@ -89,10 +102,3 @@ According to \cite{suds-doc}, SUDS had a UsernameToken implementation, so I trie
 Since version 0.4, SUDS has a plugin system, that allows developers to extend its functionality without the need to maintain a separate version of the library. During the construction of a \emph{Client} object, a list of plugin instances can be supplied, and their methods will be called at specific points of the SUDS lifecycle. Most useful use-cases include inspection and (optional) modification of the internal status. These objects should inherit one of the classes in the \emph{suds.plugin} module, and this way, only methods of interest need overriding -- those (currently three) ancestors define the points of interaction available.
 
 The full list of these can be found in \cite{suds-doc}, I'd emphasize the one, I found good use of; it's called \emph{MessagePlugin}, has five possible points of interaction, and thus allows for a fine-grained control over the SOAP message. As it can be seen on Figure \ref{fig:sudsMessage}, interception and modification is possible at all important places, with the data available in the current format (SUDS objects, DOM tree, or bytes) using holder objects called \emph{context}. One suprising thing I found was, that if plugin execution raises an exception, instead of the call failing, processing continues, and the details get logged using the Python logging system -- which means silent fail by default. Still, I found the plugin system to be a well-designed, usable form of extending SUDS.
-
-\begin{figure}[htbp]
- \centering
- \includegraphics[width=\textwidth]{images/sudsMessage.pdf}
- \caption{SUDS message processing}
- \label{fig:sudsMessage}
-\end{figure}
