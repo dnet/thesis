@@ -89,7 +89,7 @@ The class diagram also makes it clear, that there is no support for digital sign
 
 \subsubsection{Timestamp}
 
-As \cite{ibm-timestamp} and \cite{msdn-wss} agree, WS\hyp{}Security timestamp is useful in case the freshness of the message needs to be verified -- this can be important to avoid replay attacks, or to resolve issues with two or more messages causing contradiction. The standard itself is trivial to implement, and based on my observations of the codebase, the SUDS solution is complete and correct. The \emph{suds.wsse.Timestamp} class even helps the user by automatically setting and formatting the creation and expiration time -- although the lack of digital signature implementation makes this feature unusable for security purposes.
+As \cite{ibm-timestamp} and \cite{msdn-wss} agree, WS\hyp{}Security timestamp is useful in case the freshness of the message needs to be verified -- this can be important to avoid replay attacks, or to resolve issues with two or more messages causing contradiction. The standard itself is trivial to implement, and based on my observations of the codebase, the SUDS solution is complete and correct -- I later verified it also by connecting it to a properly set up CXF service. The \emph{suds.wsse.Timestamp} class even helps the user by automatically setting and formatting the creation and expiration time -- although the lack of digital signature implementation makes this feature unusable for security purposes.
 
 \subsubsection{UsernameToken}
 \label{sudsUsernameToken}
