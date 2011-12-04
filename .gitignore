@@ -9,3 +9,4 @@ thesis.pdf
 *.temp
 *.lof
 stat_*.tex
+*.lot
