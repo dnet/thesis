@@ -1,0 +1,12 @@
+HEAD	Configuration	Library	Init $\pm$ 1 ms
+		val,dec2	sdpm,dec2
+No security	CXF	1414.07	37.78
+No security	SUDS	352.81	12.92
+Plain UsernameToken	CXF	1437.4	19.44
+Plain UsernameToken	SUDS	342.76	21.87
+Digest UsernameToken	CXF	1441.67	18.18
+Digest UsernameToken	SUDS	337.45	6.33
+Signed message	CXF	1419.33	12.97
+Signed message	SUDS	547.93	14.18
+Signed message w/ TS	CXF	1435	18.14
+Signed message w/ TS	SUDS	547.13	31.85

@@ -8,3 +8,4 @@ thesis.pdf
 *.out
 *.temp
 *.lof
+stat_*.tex
