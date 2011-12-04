@@ -1,0 +1,8 @@
+n	Library	Packets
+		val,dec2
+1	CXF	15
+1	SUDS	20
+10	CXF	5.2
+10	SUDS	11
+100	CXF	4.12
+100	SUDS	10.1

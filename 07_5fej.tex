@@ -2,23 +2,86 @@
 
 \section{Measurement}
 
-\subsection{Evironment}
-
-% localhost: hw, network
-% same server
-% versions: java, cxf, python, suds
-% Wireshark
-% LibreOffice
-
 \subsection{Methodology}
 
-% code instrumentation
-% time vs clock
-% log file
-% CSV file
-% config in JSON
+I extended the \emph{Arena} testbed (see section \ref{arena}) with the option of measurement, which had a number of advantages. It ensured, that all runs were correct, and it already had the knowledge to arrange a ``rendezvous'' between services and consumers. The items added to the structure seen on Figure \ref{fig:clsdArena} were configurations and repeat values.
+
+\begin{description}
+ \item[Configurations] These define environment values, which are available to both the service and the consumer, thus are perfect to let them know about the parameters of the service. I defined the following suites to provide a way to get useful measurements.
+ \begin{description}
+  \item[No security] is without any form of authentication
+  \item[Plain UsernameToken] uses UsernameToken with a plaintext password
+  \item[Digest UsernameToken] uses UsernameToken with a digested password
+  \item[Signed message] uses digital signature without a timestamp
+  \item[Signed message w/ TS] uses digital signature with a timestamp
+ \end{description}
+ \item[Repeat values] The repeat values are important for the measurements to get a clear picture about the fixed and variable costs of the SOAP processing. I chose \textbf{1, 10 and 100}, as they provide reasonably fine enough resolution, while keeping runtime low.
+\end{description}
+
+\noindent
+I put code into both consumers (CXF and SUDS) that measured two values.
+\begin{description}
+ \item[Proxy initialization] measures the time needed to create a proxy instance that can be used to invoke service methods. The measurement is started as the first statement after the entry point, and is stopped right after an instance of the service proxy is available in a local variable.
+ \item[Invocation round-trip time] measures the time needed to invoke a service method one or more times. The measurement is started as the one for proxy initialization stops, and stops right after the last call has ended.
+\end{description}
+
+\noindent
+In measurement mode, the \emph{Arena} testbed creates two files -- named using the timestamp at program startup -- a log file and a CSV table. The log file is written only by the \emph{Arena} measurement module, and currently contains one timestamped line for every test started. The CSV table on the other hand receives only the header from \emph{Arena}, its contents are produced by the consumers. They get the name of the CSV file and a prefix that contains the parameters of the current test through environment values, and using this, the two time measurements can be appended to the table. After the tests have run, the CSV table contains all the necessary data for timing analysis readable by any spreadsheet software.
+
+\subsection{Environment}
+
+For the sake of simplicity, I kept the setup used by \emph{Arena}, so the service and the consumer under test ran on the same host, and the loopback interface was used for network interconnection. The full network traffic of the measurement was captured using Wireshark and saved for later analysis -- this way, its overhead affected all test runs equally. This made it also easy to check later, that no other traffic went through the loopback interface used, thus providing equal circumstances. The exact components along with their version numbers and relations can be seen on Figure \ref{fig:measurenv} and Table \ref{tab:measurenv}. Note, that the composite relationship between the \emph{Arena} and the other processes describes the one between a process and a subprocess, while the cloud and the lightning symbols represent the network interconnectivity through the loopback interface, which is ``bootstrapped'' using information passed through environment values.
+
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=0.9\textwidth]{images/measurenv.pdf}
+ \caption{Structural diagram of the measurement environment}
+ \label{fig:measurenv}
+\end{figure}
+
+\begin{table}[htbp]
+ \centering
+ \toprule
+ \begin{minipage}[t]{0.55\linewidth}
+  \centering
+  \begin{tabular}{rl}
+  \textbf{CPU} & Intel Core 2 Duo T7300 @ 2 GHz \\
+  \textbf{RAM} & 4 GB \\
+  \textbf{OS} & Debian GNU/Linux 7.0 ``Wheezy'' \\
+  \textbf{Kernel} & Linux 3.1.0 / i686 \\
+  \textbf{JRE} & Oracle Java SE 1.6.0\_26 \\
+  \end{tabular}
+ \end{minipage}
+ \begin{minipage}[t]{0.3\linewidth}
+  \centering
+  \begin{tabular}{rl}
+  \textbf{CXF} & 2.5.0 \\
+  \textbf{Python} & 2.7.2 \\
+  \textbf{SUDS} & 0.4.1 \\
+  \textbf{Wireshark} & 1.7.0 \\
+  \textbf{LibreOffice} & 3.4.4
+  \end{tabular}
+ \end{minipage}
+ \bottomrule
+ \caption{Attributes and version numbers of the measurement environment}
+ \label{tab:measurenv}
+\end{table}
 
 \section{Analysis}
+
+\subsection{Network traffic}
+\label{traffic}
+
+\begin{table}[htbp]
+ \begin{center}
+  \input{stat_packet}
+  \caption{Network traffic generated by CXF and SUDS invocation}
+  \label{tab:stat_packet}
+ \end{center}
+\end{table}
+
+\noindent
+The amount of network traffic generated by an invocation becomes less of an issue as network throughtput and latency continuously gets improved, although having perfect interconnections in every part of the system is far from reality. I used the TCP conversations module of the Wireshark analysis module, and put the results into Table \ref{tab:stat_packet}, which highlights a serious issue. Even in case of a single request, SUDS generates 33\% more packets as CXF, and at 100 requests, the difference becomes 250\%. The cause is simple; the current implementation of SUDS uses \emph{urllib2}, part of the Python base library, as I wrote in section \ref{sudsInvocation}. This solution opens a new TCP connection for each HTTP request by default, which causes overhead, especially a problem in case of HTTPS, which requires a TLS handshake in addition to the TCP one. Since this disadvantage of SUDS is unrelated to its architecture, I propose a soluton in Section \ref{keepalive}.
 
 \subsection{Proxy initialization}
 
@@ -46,12 +109,6 @@ The first thing that catches the eye on Table \ref{tab:stat_init} is that SUDS i
 \noindent
 Per-invocation round-trip times are more interesting to architects, especially when designing consumers with more than one call to the service, and Table \ref{tab:stat_invoke} shows interesting differences between the two solutions. In case of a single invocation, CXF takes double the time SUDS needs, but this gain decreases with the number of requests increasing, and at 100 calls without digital signatures, CXF performs 1--5\% better. On the other hand, even 100 digitally signed messages are handled in almost 10\% less time by SUDS, probably caused by the elevated use of native components.
 
-\subsection{Network traffic}
-
-% TCP keep-alive
-% headers
-% packet count
-
 \section{Architectural differences}
 
 \subsection{Runtime}
@@ -71,8 +128,9 @@ Per-invocation round-trip times are more interesting to architects, especially w
 Since most of the solutions in the Python ecosystem are free software in both senses\footnote{free as in free beer vs. free as in free speech}, software is continuously improved by its community following the needs of their members. For instance, during my thesis, I also created and published a proof-of-concept code to handle messages with attacments, and an interested user developed it further since to the point of real world usability. The following three goals are those, I think can and should be done in order to further improve Python SOA solutions.
 
 \subsection{Short-term: taking advantage of HTTP keep-alive}
+\label{keepalive}
 
-The current implementation of SUDS uses \emph{urllib2}, part of the Python base library, as I wrote in section \ref{sudsInvocation}. This solution opens a new TCP connection for each HTTP request by default, which causes overhead, especially a problem in case of HTTPS, which requires a TLS handshake in addition to the TCP one. Several ways exist to solve this issue -- as explained in \cite{so-1037406} -- some require replacing \emph{urllib2} with a whole new library, others just require extending it with plugins (so-called \emph{openers}) -- two things are for sure; it requires more than a simple method call, and the solution must be carefully tested for compatibility with different versions of its dependencies. Still, it only affects a relatively isolated part of the codebase, and would improve performance regardless of any optional (security) features.
+The HTTP implementation used by SUDS generates network overhead, as I shown in section \ref{traffic}. Several ways exist to solve this issue -- as explained in \cite{so-1037406} -- some require replacing \emph{urllib2} with a whole new library, others just require extending it with plugins (so-called \emph{openers}) -- two things are for sure; it requires more than a simple method call, and the solution must be carefully tested for compatibility with different versions of its dependencies. Still, it only affects a relatively isolated part of the codebase, and would improve performance regardless of any optional (security) features.
 
 \subsection{Mid-term: implementing XML encryption}
 
