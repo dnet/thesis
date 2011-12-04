@@ -467,7 +467,7 @@ if ($addScale)
 	$ticTop = $scaleCenter + $SCALE_TIC_HEIGHT;
 	
 	# Where to center the tic text 
-	$ticTextY = -0.1;
+	$ticTextY = -0.15;
 	
 	# Draw the line
 	$barRight = sprintf "%0.3f", $width;

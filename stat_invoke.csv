@@ -6,24 +6,28 @@ No security	10	CXF	44.66	2.19
 No security	10	SUDS	32.2	1.26
 No security	100	CXF	10.42	0.19
 No security	100	SUDS	15.24	0.75
+\addlinespace[8pt]
 Plain UsernameToken	1	CXF	831	35.28
 Plain UsernameToken	1	SUDS	407.82	16.58
 Plain UsernameToken	10	CXF	89.2	1.81
 Plain UsernameToken	10	SUDS	55.27	7.23
 Plain UsernameToken	100	CXF	16.618	0.46
 Plain UsernameToken	100	SUDS	17.8	0.2
+\addlinespace[8pt]
 Digest UsernameToken	1	CXF	839.6	30.63
 Digest UsernameToken	1	SUDS	412.79	14.54
 Digest UsernameToken	10	CXF	90.34	2.73
 Digest UsernameToken	10	SUDS	58.02	8.5
 Digest UsernameToken	100	CXF	17.3	0.37
 Digest UsernameToken	100	SUDS	18.49	0.27
+\addlinespace[8pt]
 Signed message	1	CXF	1015	18.48
 Signed message	1	SUDS	517.87	20.23
 Signed message	10	CXF	132.18	2.56
 Signed message	10	SUDS	80.61	3.07
 Signed message	100	CXF	34.6	0.34
 Signed message	100	SUDS	31.36	0.74
+\addlinespace[8pt]
 Signed message w/ TS	1	CXF	1072.8	50.63
 Signed message w/ TS	1	SUDS	525.52	49.45
 Signed message w/ TS	10	CXF	133.26	3.06
