@@ -1,5 +1,7 @@
 \chapter{Results}
 
+With the extensions and modifications I developed, it became possible to consume SOAP web services using WS-Security authentication methods with Python clients. Since I found no evidence, that it was possible before, I don't compare the solution to others in the Python ecosystem, but with the implementation I used as a reference, Apache CXF.
+
 \section{Timing measurement}
 
 \subsection{Methodology}
@@ -111,13 +113,17 @@ Per-invocation round-trip times are more interesting to architects, especially w
 
 \section{Architectural differences}
 
-\subsection{Runtime}
+\subsection{Runtime environment}
 
-% VM startup time & memory consumption
+Apache CXF runs on Java VMs, most notably the one Oracle produces. This limits its usage to -- both hardware and software -- platforms it supports, and at the same time, it makes CXF a good choice in case of an application server (for example Glassfish) that only supports Java code. In a similar way, SUDS requires a Python runtime, although SUDS itself depends on such libraries, that its code can be compiled to Java or .NET bytecode, and it can run on Nokia S60 smartphones. A constraint comes with the \emph{SudsSigner} component I developed, which uses multiple native components, as it limits its use to the CPython environment.
+
+Because of this, they're not that much competitors, since in case of a pre-existing system, compatibility with the selected runtime will decide. But on the other hand, in case of newly built systems, choosing Java vs. Python for a system that needs to consume advanced SOAP web services will be a decision with ``real'' alternatives.
 
 \subsection{Use of native components}
 
-% performance vs crashing
+For reasons of performance and reuse, I chose to depend on native components while implementing the \emph{SudsSigner} component for SUDS. The timings clearly show, that using native code improves performance; my proof-of-concept quality code beat the one of many talented CXF developers. Based on this, one may draw the conclusion, that the usage of native components is a clear advantage -- but it's far from the truth. The disadvantage is, that in case of managed components, all the code runs protected by additional safeguards, and officially, the worst thing that can happen is an exception being thrown, whereas with native components, the whole OS process can crash without prior notice.
+
+The fact that it's not a theoretical problem is proven by events that happened to me while working on XML digital signatures with both sec-wall and SUDS. As I said in section \ref{lxml}, LXML is preferred as it encapsulates low level issues with exceptions, so when I was busy developing with direct libxml2 and XMLSec, I got surprised by the fact, that a single mistake in my code can lead to for instance null pointer dereferences, which in turn cause immediate crash (segmentation fault). Long story short: native components might give performance gains, but it's important to check the price tag.
 
 \chapter{Summary}
 
