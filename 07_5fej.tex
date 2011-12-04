@@ -129,6 +129,8 @@ The fact that it's not a theoretical problem is proven by events that happened t
 
 \section{Results summary}
 
+As a result of my work, SUDS now has correct UsernameToken and digital signature implementation, which is a unique capability in the Python SOA world. I created an extensible testbed called \emph{Arena}, and continuously tested the interoperability of my solution with an Apache CXF service during the development. When I considered the proof-of-concept code ready, I added measurement instrumentation to the testbed, and analyzed the timings and the network traffic of both the SUDS and the CXF consumer. As it turned out, my solution performed reasonably well, although I found plenty room for improvement.
+
 \section{Future development opportunities}
 
 Since most of the solutions in the Python ecosystem are free software in both senses\footnote{free as in free beer vs. free as in free speech}, software is continuously improved by its community following the needs of their members. For instance, during my thesis, I also created and published a proof-of-concept code to handle messages with attacments, and an interested user developed it further since to the point of real world usability. The following three goals are those, I think can and should be done in order to further improve Python SOA solutions.
