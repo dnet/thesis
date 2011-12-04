@@ -43,6 +43,9 @@ The first thing that catches the eye on Table \ref{tab:stat_init} is that SUDS i
  \end{center}
 \end{table}
 
+\noindent
+Per-invocation round-trip times are more interesting to architects, especially when designing consumers with more than one call to the service, and Table \ref{tab:stat_invoke} shows interesting differences between the two solutions. In case of a single invocation, CXF takes double the time SUDS needs, but this gain decreases with the number of requests increasing, and at 100 calls without digital signatures, CXF performs 1--5\% better. On the other hand, even 100 digitally signed messages are handled in almost 10\% less time by SUDS, probably caused by the elevated use of native components.
+
 \subsection{Network traffic}
 
 % TCP keep-alive
