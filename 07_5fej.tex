@@ -31,7 +31,7 @@
 \end{table}
 
 \noindent
-The first thing that catches the eye on Figure \ref{tab:stat_init} is that SUDS instantiates the proxy in less then half the time CXF needs to perform the same, regardless the configuration. It's also interesting to see, that according to these timings, SUDS needs an additional \mbox{210 ms} on average in case of digital signatures, whereas CXF takes roughly the same time in every case. The most logical explanation to me is that in the SUDS client, library import is done on demand, so this extra time is what it takes to load the LXML, libxml2 and XMLSec libraries, latter two requiring native components.
+The first thing that catches the eye on Table \ref{tab:stat_init} is that SUDS instantiates the proxy in less then half the time CXF needs to perform the same, regardless the configuration. It's also interesting to see, that according to these timings, SUDS needs an additional \mbox{210 ms} on average in case of digital signatures, whereas CXF takes roughly the same time in every case. The most logical explanation to me is that in the SUDS client, library import is done on demand, so this extra time is what it takes to load the LXML, libxml2 and XMLSec libraries, latter two requiring native components.
 
 \subsection{Invocation round-trip time}
 
