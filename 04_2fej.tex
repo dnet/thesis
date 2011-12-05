@@ -4,7 +4,7 @@
 
 \subsection{Language}
 
-According to \cite{python-faq}, ``Python is an interpreted, interactive, object-oriented programming language''. What's missing from this self-description are those things, that make the language unique. The first thing most people recognize while reading a Python source code, is the use of indentation for structure markup. This feature might be odd and strict for first sight, but it makes code written by other people highly readable and reusable. The subsequent clean feeling of the code is strenghtened even more by the availability of functional constructs, which give the right tools for most purposes into the hands of the developer. The essence of the language can be reduced to a single phrase, which can be interpreted in both positive and negative ways: ``executable pseudocode'' -- code snippets are explicit enought for most people (even those without Python knowledge) to understand.
+According to \cite{python-faq}, ``Python is an interpreted, interactive, object-oriented programming language''. What's missing from this self-description are those things, that make the language unique. The first thing most people recognize while reading a Python source code, is the use of indentation for structure markup. This feature might be odd and strict for first sight, but it makes code written by other people highly readable and reusable. The subsequent clean feeling of the code is strengthened even more by the availability of functional constructs, which give the right tools for most purposes into the hands of the developer. The essence of the language can be reduced to a single phrase, which can be interpreted in both positive and negative ways: ``executable pseudocode'' -- code snippets are explicit enough for most people (even those without Python knowledge) to understand.
 
 \subsection{Runtime}
 
@@ -28,9 +28,9 @@ Of course, there are developers both working on and using SOA with Python, there
 
 \subsection{SOAPy}
 
-As \cite{so-206154} wrote, it was the best SOAP client in the Python ecosystem, but the project is abandoned. As noone maintains the codebase -- its homepage was last modified in 2001 -- it became incompatible with later Python releases, which makes it hard to use in modern environments. The Debian project doesn't even maintain a package, so the only way to install it is to download the tar.gz file (uploaded in April 27, 2001) and extract it manually.
+As \cite{so-206154} wrote, it was the best SOAP client in the Python ecosystem, but the project is abandoned. As no one maintains the codebase -- its homepage was last modified in 2001 -- it became incompatible with later Python releases, which makes it hard to use in modern environments. The Debian project doesn't even maintain a package, so the only way to install it is to download the tar.gz file (uploaded in April 27, 2001) and extract it manually.
 
-I found its internal structure very simple -- the library consists of two Python source files, both under 500 lines of length. By looking at the import section, it was obvious, that it used libraries and functions, that are way obsolete now. Still, some of them are kept for the sake of backwards compatiblity, but the PyXML package it used for XML processing is also no longer maintained, and had been removed from most major GNU/Linux distributions. The documentation -- including the examples -- suggested, that SOAPy offered client functionality only, and I didn't find any contradicting evidence in the source code.
+I found its internal structure very simple -- the library consists of two Python source files, both under 500 lines of length. By looking at the import section, it was obvious, that it used libraries and functions, that are way obsolete now. Still, some of them are kept for the sake of backwards compatibility, but the PyXML package it used for XML processing is also no longer maintained, and had been removed from most major GNU/Linux distributions. The documentation -- including the examples -- suggested, that SOAPy offered client functionality only, and I didn't find any contradicting evidence in the source code.
 
 \subsection{Zolera SOAP Infrastructure}
 \label{ZSI}
@@ -56,7 +56,7 @@ SUDS was released in a regular manner till 2010, and is available as a package i
 
 Although \cite{sec-wall-homepage} describing sec-wall as ``a security proxy that comes with tons of interesting features, very good documentation and an exceptionally friendly community'' might sound like the usual shameless self-promotion, this relatively new tool (1.0 released in April 2011) is a real gem. It acts as a proxy, thus enables the transformation of any SOAP backend into an advanced web service. Although written in Python could have meant poor performance, it takes the issue seriously and makes use of libraries that provide an native event-driven architecture.
 
-I found it during the field-work, and I worked together with its author, Dariusz Suchojad to improve it -- one of the results were complete and correct UsernameToken support (both plain and digest), and an experimental digital signature implementation. Beside the performance and reusability, the quality of the software is also suprisingly great; it's built around the Python Spring Framework, making good use of the dependency injection feature, and its tests provide 100\% code coverage.
+I found it during the field-work, and I worked together with its author, Dariusz Suchojad to improve it -- one of the results were complete and correct UsernameToken support (both plain and digest), and an experimental digital signature implementation. Beside the performance and reusability, the quality of the software is also surprisingly great; it's built around the Python Spring Framework, making good use of the dependency injection feature, and its tests provide 100\% code coverage.
 
 \subsection{Common problems}
 
