@@ -2,20 +2,20 @@
 
 \section{Completing the implementation of UsernameToken}
 
-As I mentioned in section \ref{sudsUsernameToken}, SUDS had an incomplete UsernameToken implementation, that lacked complete digest support (it could be only set up manually), and even the plaintext method violated the standards by omitting the password type attribute. I changed the constructor of the \emph{UsernameToken} class in two ways.
+As I mentioned in section \ref{sudsUsernameToken}, SUDS had an incomplete UsernameToken implementation that lacked complete digest support (it could be only set up manually), and even the plaintext method violated the standards by omitting the password type attribute. I changed the constructor of the \emph{UsernameToken} class in two ways.
 
 \begin{itemize}
  \item A new parameter of boolean type called \emph{digest} was added to the parameter list. Its default value is set to \verb|False|, thus making it optional, so previously written code depending on this method will continue to work as expected.
  \item If the new parameter is missing or set to \verb|False|, the method performs the exact same instructions as before. But if it's set to \verb|True|, the \emph{nonce} and \emph{created} variables are set, and the \emph{digest} gets calculated according to the standard.
 \end{itemize}
 
-The \emph{xml} method -- which creates the actual tree of \emph{Element} objects -- was also modified, so that it sets the \emph{Type} attribute of the \emph{wsse:Password} element to the appropriate value, based on the \emph{digest} attribute. This change had the ``side effect'', that it made the plain text method standards compliant, so the \emph{UsernameToken} implementation of SUDS became complete and correct.
+The \emph{xml} method -- which creates the actual tree of \emph{Element} objects -- was also modified, so that it sets the \emph{Type} attribute of the \emph{wsse:Password} element to the appropriate value, based on the \emph{digest} attribute. This change had the ``side effect'' that it made the plain text method standards compliant, so the \emph{UsernameToken} implementation of SUDS became complete and correct.
 
 \section{Implementing digital signatures -- SudsSigner}
 
 \subsection{Internal structure}
 
-The internal structure of the plugin can be seen on Figure \ref{fig:cmpdSudsSigner}, the stereotypes describe the functionality (component or binding) and the runtime environment (Python or native) of each component. Native components are preferred for their reusability and performance -- reusable components are tested more thoroughly, as more projects can depend on them, which makes them less prone to errors, thus more suitable for security-critical tasks, such as cryptography (OpenSSL). From a performance point of view, XML parsing and processing is also a task, that is better done using native and mature code (libxml2) because of its complexity. Python, on the other hand, is more suitable for the purpose of connecting components together, and describe high-level business logic in a readable and portable way.
+The internal structure of the plugin can be seen on Figure \ref{fig:cmpdSudsSigner}, the stereotypes describe the functionality (component or binding) and the runtime environment (Python or native) of each component. Native components are preferred for their reusability and performance -- reusable components are tested more thoroughly, as more projects can depend on them, which makes them less prone to errors, thus more suitable for security-critical tasks, such as cryptography (OpenSSL). From a performance point of view, XML parsing and processing is also a task that is better done using native and mature code (libxml2) because of its complexity. Python, on the other hand, is more suitable for the purpose of connecting components together, and describe high-level business logic in a readable and portable way.
 
 \begin{figure}[htbp]
  \centering
@@ -112,7 +112,7 @@ The cleaning process is important in case of solutions like Java, that use gener
 
 \subsection{Generation of keys}
 
-First, I used static keys from an earlier test, but later, the expired certificates cost me a lenghtful debugging session. To avoid this, I removed those keys, and created a small subsystem to generate the keypairs and certificates required for digital signature testing. Since Java -- and thus CXF, too -- prefers the Java Key Store (JKS) format, which nobody else really uses, one of my requirements was to create such solution, that generates certificates along with private and public keys in both JKS and PEM formats. The direction of conversion is arbitrary, I chose generating the keypair in JKS, because the first working version used that, but it'd be trivial to change it to the opposite.
+First, I used static keys from an earlier test, but later, the expired certificates cost me a lenghtful debugging session. To avoid this, I removed those keys, and created a small subsystem to generate the keypairs and certificates required for digital signature testing. Since Java -- and thus CXF, too -- prefers the Java Key Store (JKS) format, which nobody else really uses, one of my requirements was to create such solution that generates certificates along with private and public keys in both JKS and PEM formats. The direction of conversion is arbitrary, I chose generating the keypair in JKS, because the first working version used that, but it'd be trivial to change it to the opposite.
 
 \begin{figure}[htbp]
  \centering
