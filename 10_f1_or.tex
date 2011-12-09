@@ -1,0 +1,61 @@
+\section{Availability of relevant source code}
+
+\subsection{SUDS}
+
+Although I sent the patches enabling SUDS to digitally sign messages on May 21, 2011, as of December 2011, there's been no response from the maintainers. Because of this, the only way to obtain this code is my git repository hosted on GitHub.
+
+\bigskip
+
+\begin{center}
+ \begin{minipage}[c]{0.7\linewidth}
+  \begin{tabular}{rl}
+   \textbf{Web access:} & \url{https://github.com/dnet/suds} \\
+   \textbf{Git URL:} & \url{git://github.com/dnet/suds.git} \\
+   \textbf{License:} & GNU LGPL version 3 (as it's part of SUDS)
+  \end{tabular}
+ \end{minipage}
+ \hspace{5mm}
+ \begin{minipage}[c]{3cm}
+  \includegraphics[width=3cm]{images/qr/suds.png}
+ \end{minipage}
+\end{center}
+
+\subsection{SudsSigner}
+
+The component for creating WS\hyp{}Security digital signatures is implemented as a message plugin, and is to be considered a separate software. The source code can be downloaded from my git repository hosted on GitHub.
+
+\bigskip
+
+\begin{center}
+ \begin{minipage}[c]{0.7\linewidth}
+  \begin{tabular}{rl}
+   \textbf{Web access:} & \small\url{https://github.com/dnet/SudsSigner} \\
+   \textbf{Git URL:} & \small\url{git://github.com/dnet/SudsSigner.git} \\
+   \textbf{License:} & MIT
+  \end{tabular}
+ \end{minipage}
+ \hspace{5mm}
+ \begin{minipage}[c]{3cm}
+  \includegraphics[width=3cm]{images/qr/sudsign.png}
+ \end{minipage}
+\end{center}
+
+\subsection{PyXMLSec}
+
+The Python bindings for XMLSec were unmaintained since 2005, and the functionality SudsSigner needs can be only achieved in recent Python environments using a patch posted on the mailing list. I imported the Subversion repository of the project, applied the patch from the mailing list, and published this version of the code in my git repository hosted on GitHub.
+
+\bigskip
+
+\begin{center}
+ \begin{minipage}[c]{0.7\linewidth}
+  \begin{tabular}{rl}
+   \textbf{Web access:} & \small\url{https://github.com/dnet/pyxmlsec} \\
+   \textbf{Git URL:} & \small\url{git://github.com/dnet/pyxmlsec.git} \\
+   \textbf{License:} & GNU GPL version 2
+  \end{tabular}
+ \end{minipage}
+ \hspace{5mm}
+ \begin{minipage}[c]{3cm}
+  \includegraphics[width=3cm]{images/qr/pxsec.png}
+ \end{minipage}
+\end{center}
