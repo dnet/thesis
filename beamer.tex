@@ -1,0 +1,147 @@
+\documentclass{beamer}
+\usetheme{Warsaw}
+
+\usepackage{default}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage[english]{babel}
+\usepackage{inconsolata}
+
+\lstset{numbers=left, numberstyle=\tiny, basicstyle=\ttfamily, breaklines=true, tabsize=2, language=Python}
+
+\author{András Veres-Szentkirályi}
+\title{Extending Python Web Services}
+\date{2012. január 20.}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Table of contents}
+\tableofcontents
+\end{frame}
+
+\section{Environment}
+
+\subsection{SOAP}
+
+\begin{frame}
+\begin{center}
+ \includegraphics[height=7.5cm]{images/msdn-soap.pdf}
+\end{center}
+\end{frame}
+
+\subsection{Python}
+
+\begin{frame}
+\begin{center}
+ \includegraphics[height=7.5cm]{images/python.png}
+\end{center}
+\end{frame}
+
+\subsection{WSSE}
+
+\begin{frame}
+\begin{center}
+ \includegraphics[height=7.5cm]{images/WSSE-Logo.png}
+\end{center}
+\end{frame}
+
+\section{Problem}
+
+\subsection{Advanced Python SOA Services}
+
+\begin{frame}
+\begin{center}
+ \includegraphics[width=\textwidth]{images/sec-wall-overview.png}
+\end{center}
+\end{frame}
+
+\subsection{Advanced Python SOA Consumers}
+
+\begin{frame}
+\begin{center}
+ \includegraphics[width=\textwidth]{images/clsdSudsWsse.pdf}
+\end{center}
+\end{frame}
+
+\section{Solution}
+
+\subsection{UsernameToken patch}
+
+\begin{frame}[fragile]
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+ <soap:Header>
+  <wsse:Security xmlns:wsse="..." xmlns:wsu="..." soap:mustUnderstand="1">
+   <wsse:UsernameToken wsu:Id="UsernameToken-3">
+    <wsse:Username>admin</wsse:Username>
+    <wsse:Password Type="...#PasswordDigest">fTI7fNcwD69Z3dOT1bYfvSbQPb8=</wsse:Password>
+    <wsse:Nonce EncodingType="...#Base64Binary">1DLfpq3fLJ5O8Dlrnr4blQ==</wsse:Nonce>
+    <wsu:Created>2011-05-05T17:20:22.319Z</wsu:Created>
+   </wsse:UsernameToken>
+  </wsse:Security>
+ </soap:Header>
+ <soap:Body>
+  ...
+ </soap:Body>
+</soap:Envelope>
+\end{lstlisting}
+\end{frame}
+
+\subsection{SudsSigner}
+
+\begin{frame}
+\begin{center}
+ \includegraphics[width=\textwidth]{images/cmpdSudsSigner.pdf}
+\end{center}
+\end{frame}
+
+\section{Results}
+
+\subsection{Usage example}
+
+\begin{frame}[fragile]
+\begin{lstlisting}
+from suds import client
+from suds.wsse import Security, Timestamp
+from SudsSigner.plugin import SignerPlugin
+
+sp = SignerPlugin('privkey.pem')
+c = client.Client('http://vsza.hu/foo.wsdl', plugins=[sp])
+
+security = Security()
+security.tokens.append(Timestamp())
+c.set_options(wsse = security)
+
+print c.service.say_hello('World', 3)
+\end{lstlisting}
+\end{frame}
+
+\subsection{Performance}
+
+\begin{frame}
+\begin{center}
+Configuration: Signed Message with Timestamp
+\end{center}
+\begin{table}[htbp]
+ \begin{center}
+  \input{stat_invoke_beamer}
+ \end{center}
+\end{table}
+\end{frame}
+
+\section{}
+
+\begin{frame}
+\begin{center}
+\begin{LARGE}
+Thanks for your attention!
+\end{LARGE}
+\end{center}
+\end{frame}
+
+\end{document}

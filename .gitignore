@@ -8,5 +8,11 @@ thesis.pdf
 *.out
 *.temp
 *.lof
-stat_*.tex
+stat_init.tex
+stat_packet.tex
+stat_invoke.tex
 *.lot
+*.nav
+*.snm
+*.vrb
+beamer.pdf

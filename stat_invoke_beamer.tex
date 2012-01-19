@@ -1,0 +1,88 @@
+  \tikzstyle barchart=[fill=black!20,draw=black]
+  \tikzstyle errorbar=[very thin,draw=black!75]
+  \tikzstyle scale=[very thin,draw=black!75]
+  \begin{tabular}{ l l r@{.}l l }\toprule
+ n & Library & \multicolumn{2}{l}{Invoke $\pm$ 1 ms} & \\
+ \midrule
+  1 & CXF & 1072&80 $\pm$ 50.63 &
+  \begin{minipage}[c]{4cm}
+   \begin{tikzpicture}
+    \draw (0cm,0cm) (4,0.5);
+    \draw[barchart] (0,0.152) rectangle (3.413,0.438);
+    \draw[errorbar] (3.252,0.295) -- (3.575,0.295);
+    \draw[errorbar] (3.252,0.333) -- (3.252,0.258);
+    \draw[errorbar] (3.575,0.333) -- (3.575,0.258);
+    \draw[scale] (0,0) node[] {};
+   \end{tikzpicture}
+  \end{minipage} \\
+  1 & SUDS & 525&52 $\pm$ 49.45 &
+  \begin{minipage}[c]{4cm}
+   \begin{tikzpicture}
+    \draw (0cm,0cm) (4,0.5);
+    \draw[barchart] (0,0.152) rectangle (1.672,0.438);
+    \draw[errorbar] (1.515,0.295) -- (1.829,0.295);
+    \draw[errorbar] (1.515,0.333) -- (1.515,0.258);
+    \draw[errorbar] (1.829,0.333) -- (1.829,0.258);
+    \draw[scale] (0,0) node[] {};
+   \end{tikzpicture}
+  \end{minipage} \\
+  10 & CXF & 133&26 $\pm$ 3.06 &
+  \begin{minipage}[c]{4cm}
+   \begin{tikzpicture}
+    \draw (0cm,0cm) (4,0.5);
+    \draw[barchart] (0,0.152) rectangle (0.424,0.438);
+    \draw[errorbar] (0.414,0.295) -- (0.434,0.295);
+    \draw[errorbar] (0.414,0.333) -- (0.414,0.258);
+    \draw[errorbar] (0.434,0.333) -- (0.434,0.258);
+    \draw[scale] (0,0) node[] {};
+   \end{tikzpicture}
+  \end{minipage} \\
+  10 & SUDS & 80&92 $\pm$ 3.21 &
+  \begin{minipage}[c]{4cm}
+   \begin{tikzpicture}
+    \draw (0cm,0cm) (4,0.5);
+    \draw[barchart] (0,0.152) rectangle (0.257,0.438);
+    \draw[errorbar] (0.247,0.295) -- (0.268,0.295);
+    \draw[errorbar] (0.247,0.333) -- (0.247,0.258);
+    \draw[errorbar] (0.268,0.333) -- (0.268,0.258);
+    \draw[scale] (0,0) node[] {};
+   \end{tikzpicture}
+  \end{minipage} \\
+  100 & CXF & 35&30 $\pm$ 0.30 &
+  \begin{minipage}[c]{4cm}
+   \begin{tikzpicture}
+    \draw (0cm,0cm) (4,0.5);
+    \draw[barchart] (0,0.152) rectangle (0.112,0.438);
+    \draw[errorbar] (0.111,0.295) -- (0.113,0.295);
+    \draw[errorbar] (0.111,0.333) -- (0.111,0.258);
+    \draw[errorbar] (0.113,0.333) -- (0.113,0.258);
+    \draw[scale] (0,0) node[] {};
+   \end{tikzpicture}
+  \end{minipage} \\
+  100 & SUDS & 32&19 $\pm$ 0.46 &
+  \begin{minipage}[c]{4cm}
+   \begin{tikzpicture}
+    \draw (0cm,0cm) (4,0.5);
+    \draw[barchart] (0,0.152) rectangle (0.102,0.438);
+    \draw[errorbar] (0.101,0.295) -- (0.104,0.295);
+    \draw[errorbar] (0.101,0.333) -- (0.101,0.258);
+    \draw[errorbar] (0.104,0.333) -- (0.104,0.258);
+    \draw[scale] (0,0) node[] {};
+   \end{tikzpicture}
+  \end{minipage} \\
+ \multicolumn{4}{l}{} &  \begin{minipage}[c]{4cm}
+   \begin{tikzpicture}
+    \draw (0cm,0cm) (4,0.3);
+    \draw[scale] (0,0.2) -- (3.500,0.2);
+    \draw[scale] (0.875,0.2) -- (0.875,0.3);
+    \draw[scale] (0.875,-0.15) node[text width=0pt, text height=0pt, font=\footnotesize] {275};
+    \draw[scale] (1.75,0.2) -- (1.75,0.3);
+    \draw[scale] (1.75,-0.15) node[text width=0pt, text height=0pt, font=\footnotesize] {550};
+    \draw[scale] (2.625,0.2) -- (2.625,0.3);
+    \draw[scale] (2.625,-0.15) node[text width=0pt, text height=0pt, font=\footnotesize] {825};
+    \draw[scale] (3.5,0.2) -- (3.5,0.3);
+    \draw[scale] (3.5,-0.15) node[text width=0pt, text height=0pt, font=\footnotesize] {1100};
+   \end{tikzpicture}
+  \end{minipage} \\
+  \bottomrule
+  \end{tabular}
